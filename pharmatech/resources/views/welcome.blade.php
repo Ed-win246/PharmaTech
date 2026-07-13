@@ -7,9 +7,49 @@
         <title>PharmaTech</title>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     </head>
-    <body>
-        <h2>welcome
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafcf8;
+            font-family: sans-serif;
+        }
+        .spinner-container {
+            text-align: center;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #e2e8f0;
+            border-top: 6px solid #2563eb; /* adjust to your brand color */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        p {
+            color: #475569;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p>Loading PharmaTech...</p>
+    </div>
 
-    </body>
-
+    <script>
+        setTimeout(function () {
+            window.location.href = "{{ url('/login') }}";
+        }, 1000);
+    </script>
+</body>
 </html>
+
