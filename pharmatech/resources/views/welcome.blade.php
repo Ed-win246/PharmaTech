@@ -14,7 +14,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #fafcf8;
+            background: #fbfefc;
             font-family: sans-serif;
         }
         .spinner-container {
@@ -24,7 +24,7 @@
             width: 60px;
             height: 60px;
             border: 6px solid #e2e8f0;
-            border-top: 6px solid #2563eb; /* adjust to your brand color */
+            border-top: 6px solid #01fd01f6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
@@ -42,13 +42,13 @@
 <body>
     <div class="spinner-container">
         <div class="spinner"></div>
-        <p>Loading PharmaTech...</p>
+        <p>Loading PharmaTech Solutions...</p>
     </div>
 
     <script>
         setTimeout(function () {
             window.location.href = "{{ url('/login') }}";
-        }, 1000);
+        }, 2000);
     </script>
 </body>
 </html>
