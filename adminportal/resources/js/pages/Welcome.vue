@@ -40,7 +40,7 @@ import { dashboard, login } from '@/routes';
             </div>
         </main>
         <footer class="mx-auto max-w-6xl px-6 pb-10 lg:px-8">
-            <p class="text-xs text-[#16231f4d] dark:text-[#edeae24d]">
+            <p class="text-xs text-[#16231f4d] text-[#ffffff]">
                 &copy;2026 PharmaTech Solutions. All Rights Reserved.
             </p>
         </footer>
