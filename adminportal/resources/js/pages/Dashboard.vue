@@ -84,9 +84,7 @@ const form= useForm({
                         <th class="px-2 py-2">Status</th>
                         <th class="px-2 py-2 capitalize">{{ props.billing_cycle }}</th>
                         <th class="px-2 py-2">Billing Status</th>
-                        <th class="px-2 py-2">Actions
-                        </th>
-                        
+                        <th class="px-2 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,31 +114,36 @@ const form= useForm({
             </table>
         </div>
     </main>
-    <div  v-if="showModel" class="fixed insert-0 bg-black/40 flex items-center justify-center z-10">
-        <form @submit.prevent="submit" class="bg-white rounded-xl p-6 w-full max-w-md space-y-3 max-h-[90vh] overflow-y-auto">
+    <div v-if="showModel" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+        <form @submit.prevent="submit" class="bg-white rounded-xl p-6 w-full max-w-2xl space-y-4 max-h-[90vh] overflow-y-auto text-black">
             <h2 class="text-lg font-bold">Register New Pharmacy</h2>
-            <div>
-                <label for="name" value="name">Pharmacy Name</label>
-                <input input="text" v-model="form.name" placeholder="Pharmacy Name" class="w-full border rounded px-2 py-2">
-                <p v-if="form.errors.name" class="text-red-500 text-xs mt-1">{{ form.errors.name }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="name" class="block mb-1">Pharmacy Name</label>
+                    <input type="text" v-model="form.name" placeholder="Pharmacy Name" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.name" class="text-red-500 text-xs mt-1">{{ form.errors.name }}</p>
+                </div>
+                <div>
+                    <label for="license_number" class="block mb-1">License Number</label>
+                    <input type="text" v-model="form.license_number" placeholder="License Number" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.license_number" class="text-red-500 text-xs mt-1">{{ form.errors.license_number }}</p>
+                </div>
+                <div>
+                    <label for="owner_name" class="block mb-1">Owner Name</label>
+                    <input type="text" v-model="form.owner_name" placeholder="Owner Name" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.owner_name" class="text-red-500 text-xs mt-1">{{ form.errors.owner_name }}</p>
+                </div>
+                <div>
+                    <label for="address" class="block mb-1">Address</label>
+                    <input type="text" v-model="form.address" placeholder="Address" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.address" class="text-red-500 text-xs mt-1">{{ form.errors.address }}</p>
+                </div>
+                <div>
+                    <label for="owner_phone" class="block mb-1">Telephone</label>
+                    <input type="number" v-model="form.owner_phone" placeholder="Contact" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.owner_phone" class="text-red-500 text-xs mt-1">{{ form.errors.owner_phone }}</p>
+                </div>
             </div>
-            <div>
-                <label for="license_number" value="license_number">License Number</label>
-                <input input="text" v-model="form.license_number" placeholder="License Number" class="w-full border rounded px-2 py-2">
-                <p v-if="form.errors.license_number" class="text-red-500 text-xs mt-1">{{ form.errors.license_number }}</p>
-            </div>
-            <div>
-                <label for="name" value="owner_name">Owner Name</label>
-                <input input="text" v-model="form.owner_name" placeholder="Owner_name" class="w-full border rounded px-2 py-2">
-                <p v-if="form.errors.owner_name" class="text-red-500 text-xs mt-1">{{ form.errors.owner_name }}</p>
-            </div>
-            <div>
-                <label for="address" value="address">Address</label>
-                <input input="text" v-model="form.address" placeholder="Address" class="w-full border rounded px-2 py-2">
-                <p v-if="form.errors.address" class="text-red-500 text-xs mt-1">{{ form.errors.address }}</p>
-            </div>
-            
         </form>
-
     </div>
 </template>
