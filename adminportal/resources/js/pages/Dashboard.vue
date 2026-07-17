@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { Head,Link, router,useForm } from '@inertiajs/vue3';
-//import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 import { dashboard } from '@/routes';
+import { destroy as destroyPharmacy, store as storePharmacy } from '@/routes/pharmacies';
+
+type Pharmacy = {
+    id: number;
+    name: string;
+    license_number: string;
+    owner_name: string;
+    address: string;
+    status: string;
+};
 
 defineOptions({
     layout: {
@@ -15,41 +24,42 @@ defineOptions({
         ],
     },
 });
-const props=defineProps({
-    pharmacyCount:Number,
-    activeCount:Number,
-    pharmacies:Array,
-    billing_cycle:String,
-    billing_status:String,
-})
 
-const showModel=ref(false)
+const props = defineProps<{
+    pharmacyCount: number;
+    activeCount: number;
+    pharmacies: Pharmacy[];
+    billing_cycle: string;
+    billing_status: string;
+}>();
 
-const form= useForm({
-    name:'',
-    license_number:'',
-    address:'',
-    owner_name:'',
-    owner_email:'',
-    owner_phone:'',
-    status:'',
-    billing_cycle:'',
-    subscription_fee:'',
-    billing_date:'',
-})
- function submit(){
-    form.post(route('pharmacies.store'),{
-        onSuccess:()=>{
-            form.reset()
-            showModel.value=false
+const showModel = ref(false);
+
+const form = useForm({
+    name: '',
+    license_number: '',
+    address: '',
+    owner_name: '',
+    owner_email: '',
+    owner_phone: '',
+    status: 'active',
+    billing_cycle: 'monthly',
+    billing_date: new Date().toISOString().slice(0, 10),
+});
+
+function submit() {
+    form.post(storePharmacy().url, {
+        onSuccess: () => {
+            form.reset();
+            showModel.value = false;
         },
-    })
- }
- function deletePharmacy(id:number){
-    if(confirm('Delete this pharmacy?')){
-        router.delete(route('pharmacies.destroy',{pharmacy:id}))
-    
- }
+    });
+}
+
+function deletePharmacy(id: number) {
+    if (confirm('Delete this pharmacy?')) {
+        router.delete(destroyPharmacy(id).url);
+    }
 }
 </script>
 
@@ -134,6 +144,11 @@ const form= useForm({
                     <p v-if="form.errors.owner_name" class="text-red-500 text-xs mt-1">{{ form.errors.owner_name }}</p>
                 </div>
                 <div>
+                    <label for="owner_email" class="block mb-1">Owner Email</label>
+                    <input type="email" v-model="form.owner_email" placeholder="Owner Email" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.owner_email" class="text-red-500 text-xs mt-1">{{ form.errors.owner_email }}</p>
+                </div>
+                <div>
                     <label for="address" class="block mb-1">Address</label>
                     <input type="text" v-model="form.address" placeholder="Address" class="w-full border rounded px-2 py-2">
                     <p v-if="form.errors.address" class="text-red-500 text-xs mt-1">{{ form.errors.address }}</p>
@@ -143,6 +158,33 @@ const form= useForm({
                     <input type="number" v-model="form.owner_phone" placeholder="Contact" class="w-full border rounded px-2 py-2">
                     <p v-if="form.errors.owner_phone" class="text-red-500 text-xs mt-1">{{ form.errors.owner_phone }}</p>
                 </div>
+                <div>
+                    <label for="status" class="block mb-1">Status</label>
+                    <select v-model="form.status" class="w-full border rounded px-2 py-2">
+                        <option value="active">Active</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                    <p v-if="form.errors.status" class="text-red-500 text-xs mt-1">{{ form.errors.status }}</p>
+                </div>
+                <div>
+                    <label for="billing_cycle" class="block mb-1">Billing Cycle</label>
+                    <select v-model="form.billing_cycle" class="w-full border rounded px-2 py-2">
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                    <p v-if="form.errors.billing_cycle" class="text-red-500 text-xs mt-1">{{ form.errors.billing_cycle }}</p>
+                </div>
+                <div>
+                    <label for="billing_date" class="block mb-1">Billing Date</label>
+                    <input type="date" v-model="form.billing_date" class="w-full border rounded px-2 py-2">
+                    <p v-if="form.errors.billing_date" class="text-red-500 text-xs mt-1">{{ form.errors.billing_date }}</p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" @click="showModel = false" class="px-4 py-2 bg-[#ff2400]-600 text-green-600 border-2 rounded-lg ">Cancel</button>
+                <button type="submit" :disabled="form.processing" class="px-4 py-2 bg-[#16f529]-600 text-white rounded-lg ">
+                    {{ form.processing? 'Saving...': 'Register Pharmacy' }}
+                </button>
             </div>
         </form>
     </div>
