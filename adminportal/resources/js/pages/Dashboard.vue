@@ -13,7 +13,7 @@ type Pharmacy = {
     owner_name: string;
     address: string;
     status: string;
-    billing_cycle:Date;
+    billing_cycle: Date;
 
 };
 
@@ -65,14 +65,11 @@ function deletePharmacy(id: number) {
         router.delete(destroyPharmacy(id).url);
     }
 }
-// function updatePharmacy(id: number){
-//     if(confirm('Update This Pharmacy?')){
-//         router.update(updatePharmacy(id).url);
-//     }
-// }
+
 </script>
 
 <template>
+
     <Head title="PharmaTech Solutions" />
     <main class="flex-1 p-4">
         <div class="flex items-center justify-between mb-6">
@@ -111,35 +108,36 @@ function deletePharmacy(id: number) {
                         <td class="px-2 py-2">{{ p.license_number }}</td>
                         <td class="px-2 py-2">{{ p.owner_name }}</td>
                         <td class="px-2 py-2">{{ p.address }}</td>
-                        <td class="px-2 py-2">{{ p. billing_cycle}}</td>
+                        <td class="px-2 py-2">{{ p.billing_cycle }}</td>
                         <td class="px-2 py-2">
-                        <!-- <td class="px-4 py-3"> -->
-                            <button  class="px-2 py-1 rounded-full text-xs" :class="p.status ==='active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                            <!-- <td class="px-4 py-3"> -->
+                            <button class="px-2 py-1 rounded-full text-xs"
+                                :class="p.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
                                 {{ p.status }}
                             </button>
                         </td>
                         <td class="px-2 py-2 ">
-                            <button
-                                @click="deletePharmacy(p.id)"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-red-600 text-sm font-medium hover:bg-red-50 hover:text-red-700 transition-colors"
-                                >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <button @click="deletePharmacy(p.id)"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-red-600 text-sm font-medium hover:bg-red-50 hover:text-red-700 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
                                 Delete
-                                </button>
+                            </button>
                         </td>
                     </tr>
                     <tr v-if="props.pharmacies.length === 0">
                         <td colspan="8" class="px-2 py-2 text-center">
                             No Pharmacies registered yet.
                         </td>
-                    </tr>  
+                    </tr>
                 </tbody>
             </table>
         </div>
     </main>
-    <div v-if="showModel" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+    <!-- <div v-if="showModel" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
         <form @submit.prevent="submit" class="bg-white rounded-xl p-6 w-full max-w-2xl space-y-4 max-h-[90vh] overflow-y-auto text-black">
             <h2 class="text-lg font-bold">Register New Pharmacy</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -204,6 +202,137 @@ function deletePharmacy(id: number) {
                 <button type="button" @click="showModel = false" class="px-4 py-2 bg-[#16f529] text-white  rounded-lg ">Cancel</button>
                 <button type="submit" :disabled="form.processing" class="px-4 py-2 bg-[#16f529] text-white rounded-lg disabled:opacity-50 ">
                     {{ form.processing? 'Saving...': 'Register Pharmacy' }}
+                </button>
+            </div>
+        </form>
+    </div> -->
+    <div v-if="showModel" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+        <form @submit.prevent="submit"
+            class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl text-slate-800">
+            <div
+                class="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white rounded-t-2xl">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800"> + Register New Pharmacy</h2>
+                    <p class="text-sm text-slate-400">Fill in the pharmacy and owner details below</p>
+                </div>
+                <button type="button" @click="showModel = false"
+                    class="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="px-6 py-5 space-y-6">
+                <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wide text-indigo-500 mb-3">Pharmacy Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Pharmacy Name</label>
+                            <input type="text" v-model="form.name" placeholder="e.g. Kampala Pharmacy"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.name" class="text-red-500 text-xs mt-1">{{ form.errors.name }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">License Number</label>
+                            <input type="text" v-model="form.license_number" placeholder="e.g. LIC-00123"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.license_number" class="text-red-500 text-xs mt-1">{{
+                                form.errors.license_number }}</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Address</label>
+                            <input type="text" v-model="form.address" placeholder="Street, city"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.address" class="text-red-500 text-xs mt-1">{{ form.errors.address }}
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Status</label>
+                            <select v-model="form.status"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <option value="active">Active</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                            <p v-if="form.errors.status" class="text-red-500 text-xs mt-1">{{ form.errors.status }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100"></div>
+                <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wide text-indigo-500 mb-3">Owner Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Owner Name</label>
+                            <input type="text" v-model="form.owner_name" placeholder="Full name"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.owner_name" class="text-red-500 text-xs mt-1">{{ form.errors.owner_name
+                                }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Owner Email</label>
+                            <input type="email" v-model="form.owner_email" placeholder="name@example.com"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.owner_email" class="text-red-500 text-xs mt-1">{{
+                                form.errors.owner_email }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Telephone</label>
+                            <input type="tel" v-model="form.owner_phone" inputmode="numeric" maxlength="20"
+                                placeholder="e.g. 0700000000"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.owner_phone" class="text-red-500 text-xs mt-1">{{
+                                form.errors.owner_phone }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100"></div>
+
+                <!-- Billing details -->
+                <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wide text-indigo-500 mb-3">Billing Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Billing Cycle</label>
+                            <select v-model="form.billing_cycle"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <p v-if="form.errors.billing_cycle" class="text-red-500 text-xs mt-1">{{
+                                form.errors.billing_cycle }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Billing Date</label>
+                            <input type="date" v-model="form.billing_date"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.billing_date" class="text-red-500 text-xs mt-1">{{
+                                form.errors.billing_date }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">Next Billing Date</label>
+                            <input type="date" v-model="form.next_billing_date"
+                                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <p v-if="form.errors.next_billing_date" class="text-red-500 text-xs mt-1">{{
+                                form.errors.next_billing_date }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div
+                class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl sticky bottom-0">
+                <button type="button" @click="showModel = false"
+                    class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-100 transition">
+                    Cancel
+                </button>
+                <button type="submit" :disabled="form.processing"
+                    class="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition">
+                    {{ form.processing ? 'Saving...' : 'Register Pharmacy' }}
                 </button>
             </div>
         </form>
