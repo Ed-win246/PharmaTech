@@ -3,7 +3,7 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 import { dashboard } from '@/routes';
-import { destroy as destroyPharmacy, store as storePharmacy } from '@/routes/pharmacies';
+import { destroy as destroyPharmacy, store as storePharmacy, update as updatePharmacy } from '@/routes/pharmacies';
 
 
 type Pharmacy = {
@@ -11,6 +11,8 @@ type Pharmacy = {
     name: string;
     license_number: string;
     owner_name: string;
+    owner_email:string;
+    owner_phone: string;
     address: string;
     status: string;
     billing_cycle: Date;
@@ -33,8 +35,6 @@ const props = defineProps<{
     activeCount: number;
     inactiveCount:number;
     pharmacies: Pharmacy[];
-    // billing_cycle: string;
-    // billing_status: string;
 }>();
 
 const showModel = ref(false);
@@ -68,6 +68,48 @@ function deletePharmacy(id: number) {
     }
 }
 
+const showEditModel=ref(false);
+const editingPharmacy=ref<Pharmacy|null>(null);
+
+const editForm=useForm({
+    name: '',
+    license_number: '',
+    address: '',
+    owner_name: '',
+    owner_email: '',
+    owner_phone: '',
+    status: '',
+    billing_cycle: '',
+    billing_date: new Date().toISOString().slice(0, 10),
+    next_billing_date: new Date().toISOString().slice(0, 10),
+    billing_status:''
+});
+
+function openEditModel(pharmacy: Pharmacy){
+    editingPharmacy.value=pharmacy;
+    editForm.name=pharmacy.name;
+    editForm.license_number=pharmacy.license_number;
+    editForm.address=pharmacy.address;
+    editForm.owner_name=pharmacy.owner_name;
+    editForm.owner_email=pharmacy.owner_email;
+    editForm.owner_phone=pharmacy.owner_phone;
+    editForm.status=pharmacy.status;
+    editForm.billing_cycle=pharmacy.billing_cycle.toString();
+    editForm.billing_date=new Date(pharmacy.billing_cycle).toISOString().slice(0,10);
+    editForm.next_billing_date=new Date(pharmacy.billing_cycle).toISOString().slice(0,10);
+    editForm.billing_status=pharmacy.billing_status;
+    showEditModel.value=true;
+}
+
+function submitEdit(){
+    editForm.put(updatePharmacy(editingPharmacy.value!.id).url,{
+        preserveScroll:true,
+        onSuccess:()=>{
+            showEditModel.value=false
+        },
+    })
+}
+
 </script>
 
 <template>
@@ -81,16 +123,16 @@ function deletePharmacy(id: number) {
                 + Register New Pharmacy
             </button>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-xl p-6 shahow-sm border ">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8  ">
+            <div class="bg-white rounded-xl p-6 shahow-sm border transition duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
                 <p class="text-sm text-black ">Total Pharmacies</p>
                 <p class="text-2xl font-bold text-black justify-center flex">{{ props.pharmacyCount }}</p>
             </div>
-            <div class="bg-white rounded-xl p-6 shahow-sm border">
+            <div class="bg-white rounded-xl p-6 shahow-sm border transition duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
                 <p class="text-sm text-black ">Active Pharmacies</p>
                 <p class="text-2xl  font-bold text-black justify-center flex">{{ props.activeCount }}</p>
             </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm border">
+            <div class="bg-white rounded-xl p-6 shadow-sm border transition duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
                 <p class="text-sm text-slate-900">InActive Pharamcies</p>
                 <p class="text-2xl fot-bold text-black justify-center flex">{{ props.inactiveCount }}</p>
             </div>
@@ -106,7 +148,7 @@ function deletePharmacy(id: number) {
                         <th class="px-2 py-2">Status</th>
                         <th class="px-2 py-2">Billing Cycle</th>
                         <th class="px-2 py-2">Billing Status</th>
-                        <th class="px-2 py-2">Actions</th>
+                        <th class="px-2 py-2 ">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="text-black">
@@ -119,13 +161,21 @@ function deletePharmacy(id: number) {
                             <button class="px-2 py-1 rounded-full text-xs"
                                 :class="{
                                 'bg-green-100 text-green-800': p.status === 'active',
-                                'bg-red-100 text-red-800':p.status==='inactive',
+                                'bg-red-100 text-red-800': p.status === 'inactive',
                                 'bg-slate-100 text-slate-600': !['active','inactive'].includes(p.status)}">
                                 {{ p.status }}
                             </button></td>
                         <td class="px-2 py-2">{{ p.billing_cycle }}</td>
                         <td class="px-2 py-2">{{ p.billing_status }}</td>
                         <td class="px-2 py-2 ">
+                                <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-green-600 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Update
+                            </button>
                             <button @click="deletePharmacy(p.id)"
                                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-red-600 text-sm font-medium hover:bg-red-50 hover:text-red-700 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -184,7 +234,7 @@ function deletePharmacy(id: number) {
                     <label for="status" class="block mb-1">Status</label>
                     <select v-model="form.status" class="w-full border rounded px-2 py-2">
                         <option value="active">Active</option>
-                        <option value="suspended">Suspended</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                     <p v-if="form.errors.status" class="text-red-500 text-xs mt-1">{{ form.errors.status }}</p>
                 </div>
@@ -224,13 +274,6 @@ function deletePharmacy(id: number) {
                     <h2 class="text-lg font-bold text-slate-800"> + Register New Pharmacy</h2>
                     <p class="text-sm text-slate-400">Fill in the pharmacy and owner details below</p>
                 </div>
-                <button type="button" @click="showModel = false"
-                    class="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
 
             <div class="px-6 py-5 space-y-6">
@@ -262,7 +305,7 @@ function deletePharmacy(id: number) {
                             <select v-model="form.status"
                                 class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 <option value="active">Active</option>
-                                <option value="suspended">Inactive</option>
+                                <option value="inactive">Inactive</option>
                             </select>
                             <p v-if="form.errors.status" class="text-red-500 text-xs mt-1">{{ form.errors.status }}</p>
                         </div>
@@ -318,11 +361,10 @@ function deletePharmacy(id: number) {
                             <label class="block text-sm font-medium text-slate-600 mb-1">Billing Status</label>
                             <select v-model="form.billing_status"
                                 class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                <option value="monthly">Paid</option>
-                                <option value="yearly">Pending</option>
+                                <option value="paid">Paid</option>
+                                <option value="pending">Pending</option>
                             </select>
-                            <p v-if="form.errors.billing_status" class="text-red-500 text-xs mt-1">{{
-                                form.errors.billing_status }}</p>
+                            <p v-if="form.errors.billing_status" class="text-red-500 text-xs mt-1">{{form.errors.billing_status }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">Billing Date</label>

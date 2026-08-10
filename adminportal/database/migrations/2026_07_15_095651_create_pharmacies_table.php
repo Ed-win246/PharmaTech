@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('owner_name');
             $table->string('owner_email')->unique();
             $table->string('owner_phone');
-            $table->enum('status',['active','suspended'])->default('active');
+            $table->enum('status',['active','inactive'])->default('active');
 
             $table->enum('billing_cycle',['monthly','yearly'])->default('monthly');
             $table->decimal('subscription_fee',10,2)->default(0);

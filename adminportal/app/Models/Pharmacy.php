@@ -16,7 +16,6 @@ class Pharmacy extends Model
         'owner_phone',
         'status',
         'billing_cycle',
-        // 'subscription_fee',
         'billing_date',
         'next_billing_date',
         'billing_status'
@@ -24,6 +23,5 @@ class Pharmacy extends Model
      protected $casts=[
         'billing_date'=>'date',
         'next_billing_date'=>'date',
-        // 'subscription_fee'=>'decimal:2',
-     ];
+            ];
 }
