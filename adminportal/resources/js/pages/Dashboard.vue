@@ -497,8 +497,8 @@ function submitEdit(){
             </div>
         </form>
     </div>
-    <footer class="bg-slate-100 border-t border-slate-200 py-4 px-6 max-w-6xl mt-8">
-        <p class="text-center text-sm text-slate-500">
+    <footer class="bg-slate-100  border-slate-200 py-4 px-4 w-[97%] mx-auto rounded-lg mt-6">
+        <p class="text-center text-1xl text-slate-500">
             &copy; 2026 PharmaTech. All rights reserved.
         </p>
     </footer>
