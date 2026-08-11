@@ -17,7 +17,8 @@ type Pharmacy = {
     owner_phone: string;
     address: string;
     status: string;
-    billing_cycle: Date;
+    billing_date: Date;
+    billing_cycle: string;
     billing_status:string;
 };
 
@@ -98,11 +99,10 @@ function openEditModel(pharmacy: Pharmacy){
     editForm.owner_phone=pharmacy.owner_phone;
     editForm.status=pharmacy.status;
     editForm.billing_cycle=pharmacy.billing_cycle.toString();
-    editForm.billing_date=new Date(pharmacy.billing_cycle).toISOString().slice(0,10);
-    editForm.next_billing_date=new Date(pharmacy.billing_cycle).toISOString().slice(0,10);
+    editForm.billing_date=new Date(pharmacy.billing_date).toISOString().slice(0,10);
+    editForm.next_billing_date=new Date(pharmacy.billing_date).toISOString().slice(0,10);
     editForm.billing_status=pharmacy.billing_status;
     showEditModel.value=true;
-    console.log('showEditModel set to:', showEditModel.value);
 }
 
 function submitEdit(){
