@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Head, router, useForm } from '@inertiajs/vue3';
+import { Pill, HousePlug} from '@lucide/vue';
 import { ref } from 'vue';
+
 
 import { dashboard } from '@/routes';
 import { destroy as destroyPharmacy, store as storePharmacy, update as updatePharmacy } from '@/routes/pharmacies';
@@ -86,6 +88,7 @@ const editForm=useForm({
 });
 
 function openEditModel(pharmacy: Pharmacy){
+    console.log('Opening edit modal for pharmacy:', pharmacy);
     editingPharmacy.value=pharmacy;
     editForm.name=pharmacy.name;
     editForm.license_number=pharmacy.license_number;
@@ -99,6 +102,7 @@ function openEditModel(pharmacy: Pharmacy){
     editForm.next_billing_date=new Date(pharmacy.billing_cycle).toISOString().slice(0,10);
     editForm.billing_status=pharmacy.billing_status;
     showEditModel.value=true;
+    console.log('showEditModel set to:', showEditModel.value);
 }
 
 function submitEdit(){
@@ -119,22 +123,31 @@ function submitEdit(){
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-white">OverView</h1>
             <button @click="showModel = true"
-                class="px-4 py-2 bg-[#16f529]-600 text-white rounded-lg  border-3 hover:bg-[#16f529] focus:outline-none focus:ring-2 focus:ring-[#16f529] focus:ring-offset-2">
+                class="px-4 py-2 bg-[#16f529] text-white rounded-lg  border-3 hover:bg-[#16f529] focus:outline-none focus:ring-2 focus:ring-[#16f529] focus:ring-offset-2">
                 + Register New Pharmacy
             </button>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8  ">
             <div class="bg-white rounded-xl p-6 shahow-sm border transition duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
-                <p class="text-sm text-black ">Total Pharmacies</p>
+                <div class="flex items-center gap-2 mb-2">
+                    <p class="text-sm text-black">Total Pharmacies</p>
+                    <HousePlug class="w-5 h-5 text-green-500" />
+                </div>
                 <p class="text-2xl font-bold text-black justify-center flex">{{ props.pharmacyCount }}</p>
             </div>
             <div class="bg-white rounded-xl p-6 shahow-sm border transition duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
-                <p class="text-sm text-black ">Active Pharmacies</p>
-                <p class="text-2xl  font-bold text-black justify-center flex">{{ props.activeCount }}</p>
+                <div class="flex items-center gap-2 mb-2">
+                    <p class="text-sm text-black">Active Pharmacies</p>
+                    <Pill class="w-5 h-5 text-green-500" />
+                </div>
+                <p class="text-2xl font-bold text-black justify-center flex">{{ props.activeCount }}</p>
             </div>
             <div class="bg-white rounded-xl p-6 shadow-sm border transition duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
-                <p class="text-sm text-slate-900">InActive Pharamcies</p>
-                <p class="text-2xl fot-bold text-black justify-center flex">{{ props.inactiveCount }}</p>
+                <div class="flex items-center gap-2 mb-2">
+                    <p class="text-sm text-slate-900">InActive Pharamcies</p>
+                    <HousePlug class="w-5 h-5 text-red-500" />
+                </div>
+                <p class="text-2xl font-bold text-black justify-center flex">{{ props.inactiveCount }}</p>
             </div>
         </div>
         <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
@@ -168,7 +181,7 @@ function submitEdit(){
                         <td class="px-2 py-2">{{ p.billing_cycle }}</td>
                         <td class="px-2 py-2">{{ p.billing_status }}</td>
                         <td class="px-2 py-2 ">
-                                <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-green-600 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                <button  @click="openEditModel(p)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-green-600 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -398,4 +411,94 @@ function submitEdit(){
             </div>
         </form>
     </div>
+    <div v-if="showEditModel" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+        <form
+            @submit.prevent="submitEdit"
+            class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl text-slate-800"
+        >
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white rounded-t-2xl">
+            <h2 class="text-lg font-bold text-slate-800">Update Pharmacy</h2>
+            <button type="button" @click="showEditModel = false" class="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            </div>
+
+            <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Pharmacy Name</label>
+                <input v-model="editForm.name" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <p v-if="editForm.errors.name" class="text-red-500 text-xs mt-1">{{ editForm.errors.name }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">License Number</label>
+                <input v-model="editForm.license_number" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <p v-if="editForm.errors.license_number" class="text-red-500 text-xs mt-1">{{ editForm.errors.license_number }}</p>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-slate-600 mb-1">Address</label>
+                <input v-model="editForm.address" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Owner Name</label>
+                <input v-model="editForm.owner_name" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Owner Email</label>
+                <input v-model="editForm.owner_email" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <p v-if="editForm.errors.owner_email" class="text-red-500 text-xs mt-1">{{ editForm.errors.owner_email }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Telephone</label>
+                <input v-model="editForm.owner_phone" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Status</label>
+                <select v-model="editForm.status" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                </select>
+                <p v-if="editForm.errors.status" class="text-red-500 text-xs mt-1">{{ editForm.errors.status }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Billing Cycle</label>
+                <select v-model="editForm.billing_cycle" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Billing Status</label>
+                <select v-model="editForm.billing_status" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="paid">Paid</option>
+                <option value="pending">Pending</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Billing Date</label>
+                <input type="date" v-model="editForm.billing_date" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Next Billing Date</label>
+                <input type="date" v-model="editForm.next_billing_date" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
+            </div>
+
+            <div class="flex justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl sticky bottom-0">
+            <button type="button" @click="showEditModel = false" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-100 transition">
+                Cancel
+            </button>
+            <button type="submit" :disabled="editForm.processing" class="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition">
+                {{ editForm.processing ? 'Saving...' : 'Save Changes' }}
+            </button>
+            </div>
+        </form>
+    </div>
+    <footer class="bg-slate-100 border-t border-slate-200 py-4 px-6 w-full">
+        <p class="text-center text-1xl text-slate-500">
+            &copy; 2026 PharmaTech. All rights reserved.
+        </p>
+    </footer>
 </template>
