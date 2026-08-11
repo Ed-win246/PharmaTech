@@ -411,6 +411,7 @@ function submitEdit(){
             </div>
         </form>
     </div>
+    <!-- Edit Pharmacy Modal -->
     <div v-if="showEditModel" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
         <form
             @submit.prevent="submitEdit"
@@ -496,8 +497,8 @@ function submitEdit(){
             </div>
         </form>
     </div>
-    <footer class="bg-slate-100 border-t border-slate-200 py-4 px-6 w-full">
-        <p class="text-center text-1xl text-slate-500">
+    <footer class="bg-slate-100 border-t border-slate-200 py-4 px-6 max-w-6xl mt-8">
+        <p class="text-center text-sm text-slate-500">
             &copy; 2026 PharmaTech. All rights reserved.
         </p>
     </footer>
